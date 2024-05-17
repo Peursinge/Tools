@@ -98,7 +98,7 @@ void timed_bubble_sort(int arr[], int size)
     }
     clock_t end = clock();
     double timer = (double)(end-begin)/CLOCKS_PER_SEC;
-    printf("sorted in %f seconds \n", timer);
+    printf("sorted in %f seconds with bubble_sort\n", timer);
 }
 
 void coktail_shaker(int arr[], int size){
@@ -130,7 +130,37 @@ void coktail_shaker(int arr[], int size){
     
 }
 
+void timed_coktail_shaker(int arr[], int size){
+    clock_t begin = clock();
+    int i, j;
+    bool swapped;
+    for (i = 0; i < size - 1; i++) {
+        swapped = false;
+        for (j = 0; j < size - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                swap(&arr[j], &arr[j + 1]);
+                swapped = true;
+            }
+        }
+        if (swapped == false)
+            break;
+    }
 
+    for (i = size-1; i > 0; i--) {
+        swapped = false;
+        for (j = size - i - 1; j > 0; j++) {
+            if (arr[j] > arr[j + 1]) {
+                swap(&arr[j], &arr[j + 1]);
+                swapped = true;
+            }
+        }
+        if (swapped == false)
+            break;
+    }
+    clock_t end = clock();
+    double timer = (double)(end-begin)/CLOCKS_PER_SEC;
+    printf("sorted in %f seconds with cocktail shaker\n", timer);
+}
 
 void bogo_sort(int arr[], int size){
     int i = 0;
@@ -182,3 +212,25 @@ void array_pprint(int *array, int size)
 ////////////////////////////////////////////////////////////////////////////////
 
 
+int main(){
+    srand(time(NULL));
+    int TAILLE = 20000;
+    int range = 999;
+    
+    int* list = malloc(TAILLE * sizeof(int));         // allocation memoire
+    if(list == NULL){
+        exit(0);
+    }
+
+    for(size_t i = 0; i < TAILLE; i++){
+        list[i] = rand() % range;
+    }
+
+    timed_bubble_sort(list, TAILLE);
+    shuffle(list, TAILLE);
+    timed_coktail_shaker(list, TAILLE);
+
+    
+
+    free(list);                                      // free !!
+}

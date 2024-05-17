@@ -16,6 +16,7 @@ int length(int *arr);
 void bubble_sort(int arr[], int size);
 void timed_bubble_sort(int arr[], int size);
 void coktail_shaker(int arr[], int size);
+void timed_coktail_shaker(int arr[], int size);
 void bogo_sort(int arr[], int size);
 void timed_bogo_sort(int arr[], int size);
 
