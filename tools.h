@@ -9,6 +9,7 @@
 int min(int a, int b);
 int max(int a, int b);
 int abs(int a);
+bool coinflip();
 void swap(int *x, int *y);
 int is_sorted(int *arr, int size);
 void shuffle(int *arr, int size);
@@ -17,6 +18,9 @@ void bubble_sort(int arr[], int size);
 void timed_bubble_sort(int arr[], int size);
 void coktail_shaker(int arr[], int size);
 void timed_coktail_shaker(int arr[], int size);
+void quickSort(int array[], int low, int high);
+void timed_quickSort(int array[], int low, int high);
+void stalin_sort(int arr[], int size);
 void bogo_sort(int arr[], int size);
 void timed_bogo_sort(int arr[], int size);
 

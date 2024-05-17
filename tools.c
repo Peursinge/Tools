@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 
-////////////////////////////////  math tests  //////////////////////////////////
+////////////////////////////////  math tests  /////////////////////////////////
 
 int min(int a, int b){
     if (a > b)
@@ -26,8 +26,11 @@ int abs(int a){
     return a;
 }
 
+bool coinflip(){
+    return rand()%2;
+}
 
-/////////////////////////////  sorting algorithms  /////////////////////////////
+/////////////////////////////  sorting algorithms  ////////////////////////////
 
 void swap(int *x, int *y){
     if (x==y)
@@ -162,6 +165,81 @@ void timed_coktail_shaker(int arr[], int size){
     printf("sorted in %f seconds with cocktail shaker\n", timer);
 }
 
+int partition(int arr[], int low, int high) {
+  
+  // select the rightmost element as pivot
+  int pivot = arr[high];
+  
+  // pointer for greater element
+  int i = (low - 1);
+
+  // traverse each element of the arr
+  // compare them with the pivot
+  for (int j = low; j < high; j++) {
+    if (arr[j] <= pivot) {
+        
+      // if element smaller than pivot is found
+      // swap it with the greater element pointed by i
+      i++;
+      
+      // swap element at i with element at j
+      swap(&arr[i], &arr[j]);
+    }
+  }
+
+  // swap the pivot element with the greater element at i
+  swap(&arr[i + 1], &arr[high]);
+  
+  // return the partition point
+  return (i + 1);
+}
+
+void quickSort(int arr[], int low, int high) {
+  if (low < high) {
+    
+    // find the pivot element such that
+    // elements smaller than pivot are on left of pivot
+    // elements greater than pivot are on right of pivot
+    int pi = partition(arr, low, high);
+    
+    // recursive call on the left of pivot
+    quickSort(arr, low, pi - 1);
+    
+    // recursive call on the right of pivot
+    quickSort(arr, pi + 1, high);
+  }
+}
+
+void timed_quickSort(int arr[], int low, int high) {
+    clock_t begin = clock();
+    if (low < high) {
+    
+    // find the pivot element such that
+    // elements smaller than pivot are on left of pivot
+    // elements greater than pivot are on right of pivot
+    int pi = partition(arr, low, high);
+    
+    // recursive call on the left of pivot
+    quickSort(arr, low, pi - 1);
+    
+    // recursive call on the right of pivot
+    quickSort(arr, pi + 1, high);
+  }
+    clock_t end = clock();
+    double timer = (double)(end-begin)/CLOCKS_PER_SEC;
+    printf("sorted in %f seconds with quick_sort\n", timer);
+}
+
+void stalin_sort(int arr[], int size){
+    for(size_t i = 0; i < size; i++){
+            if(arr[i] >= arr[i+1]){
+                arr[i+1] = 0;
+                i++;
+            }
+        }
+    bubble_sort(arr, size);
+}
+
 void bogo_sort(int arr[], int size){
     int i = 0;
     while (!is_sorted(arr, size))
@@ -189,14 +267,12 @@ void timed_bogo_sort(int arr[], int size){
     printf("sorted in %f seconds \n", timer);
 }
 
+///////////////////////////////////  prints  //////////////////////////////////
 
-
-///////////////////////////////////  prints  ///////////////////////////////////
-
-void array_pprint(int *array, int size)
+void array_pprint(int *arr, int size)
 {
-    int *p = array;
-    int *end = array + size;
+    int *p = arr;
+    int *end = arr + size;
     char *pad = "{ ";
 
     while (p < end)
@@ -207,15 +283,13 @@ void array_pprint(int *array, int size)
     printf(" }\n");
 }
 
-
-
-////////////////////////////////////////////////////////////////////////////////
-
+///////////////////////////////////////////////////////////////////////////////
 
 int main(){
     srand(time(NULL));
-    int TAILLE = 20000;
-    int range = 999;
+    int TAILLE = 10000;
+    int range = 100;
+    bool neg = true;
     
     int* list = malloc(TAILLE * sizeof(int));         // allocation memoire
     if(list == NULL){
@@ -223,14 +297,23 @@ int main(){
     }
 
     for(size_t i = 0; i < TAILLE; i++){
-        list[i] = rand() % range;
+        int val = rand() % range;
+        if(neg && coinflip()){
+            list[i] = - val;
+        }
+        else
+            list[i] = val;
     }
 
     timed_bubble_sort(list, TAILLE);
     shuffle(list, TAILLE);
     timed_coktail_shaker(list, TAILLE);
+    shuffle(list, TAILLE);
+    timed_quickSort(list, 0, TAILLE-1);
+    // array_pprint(list, TAILLE);
+    // stalin_sort(list, TAILLE);
+    // array_pprint(list, TAILLE);
 
-    
 
     free(list);                                      // free !!
 }
