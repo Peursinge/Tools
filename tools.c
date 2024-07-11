@@ -162,7 +162,7 @@ void timed_coktail_shaker(int arr[], int size){
     }
     clock_t end = clock();
     double timer = (double)(end-begin)/CLOCKS_PER_SEC;
-    printf("sorted in %f seconds with cocktail shaker\n", timer);
+    printf("sorted in %f seconds with cocktail_shaker\n", timer);
 }
 
 int partition(int arr[], int low, int high) {
