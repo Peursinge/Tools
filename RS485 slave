@@ -1,0 +1,50 @@
+#include <SoftwareSerial.h>
+
+int led = 13; // LED pour indiquer la réception de données
+SoftwareSerial mySerial(0, 1); // RX, TX (Configurer les broches en fonction de votre montage)
+
+void setup() {
+  pinMode(led, OUTPUT);
+  mySerial.begin(9600); // Baud rate pour correspondre avec l'émetteur
+  Serial.begin(9600);   // Pour la communication avec le moniteur série
+}
+
+void loop() {
+  if (mySerial.available()) {
+    digitalWrite(led, HIGH); // Allume la LED pendant la réception
+    String receivedData = "";
+    
+    // Lecture des données disponibles
+    while (mySerial.available()) {
+      char receivedChar = mySerial.read();
+      receivedData += receivedChar;
+    }
+
+    // Affichage des données reçues dans le moniteur série
+    Serial.print("Donnée reçue : ");
+    Serial.println(receivedData);
+
+    // Traitez ici les données si nécessaire, par exemple convertir en float
+    if (isNumeric(receivedData)) {
+      float temperature = receivedData.toFloat();
+      Serial.print("Température décodée : ");
+      Serial.print(temperature);
+      Serial.println(" °C");
+    } else {
+      Serial.println("Erreur de format des données reçues");
+    }
+
+    digitalWrite(led, LOW); // Éteint la LED après la réception
+  }
+  delay(100);
+}
+
+// Vérifie si une chaîne est un nombre valide
+bool isNumeric(String str) {
+  for (int i = 0; i < str.length(); i++) {
+    if (!isDigit(str[i]) && str[i] != '.' && str[i] != '-') {
+      return false;
+    }
+  }
+  return true;
+}
